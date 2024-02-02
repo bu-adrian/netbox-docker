@@ -18,6 +18,8 @@ services:
     - netbox-media-files:/opt/netbox/netbox/media:rw
     - netbox-reports-files:/opt/netbox/netbox/reports:rw
     - netbox-scripts-files:/opt/netbox/netbox/scripts:rw
+    networks:
+      - pentru_https
   netbox-worker:
     <<: *netbox
     depends_on:
@@ -51,7 +53,8 @@ services:
     env_file: env/postgres.env
     volumes:
     - netbox-postgres-data:/var/lib/postgresql/data
-
+    networks:
+      - pentru_https
   # redis
   redis:
     image: docker.io/redis:7-alpine
@@ -62,6 +65,8 @@ services:
     env_file: env/redis.env
     volumes:
     - netbox-redis-data:/data
+    networks:
+      - pentru_https
   redis-cache:
     image: docker.io/redis:7-alpine
     command:
@@ -71,7 +76,11 @@ services:
     env_file: env/redis-cache.env
     volumes:
     - netbox-redis-cache-data:/data
-
+    networks:
+      - pentru_https
+networks:
+  pentru_https:
+    external: true
 volumes:
   netbox-media-files:
     driver: local
